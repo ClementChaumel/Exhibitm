@@ -46,7 +46,6 @@ const Image = styled.img`
 `
 
 const Upload = () => {
-  const maxMbFileSize = 5 * 1024 * 1024 // 5Mb
   const [image, setImage] = useState(null)
   const [description, setDescription] = useState("")
   const [author, setAuthor] = useState("")
@@ -88,11 +87,7 @@ const Upload = () => {
   }
 
   return (
-    <ImageUploading
-      onChange={onImageChange}
-      maxFileSize={maxMbFileSize}
-      acceptType={["jpg"]}
-    >
+    <ImageUploading onChange={onImageChange} acceptType={["jpg"]}>
       {({ imageList, onImageUpload, onImageRemoveAll }) => (
         // write your building UI
         <Container>

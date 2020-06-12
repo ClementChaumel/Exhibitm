@@ -123,11 +123,7 @@ const Gallery = () => {
   const [hasVoted2, setHasVoted2] = useState(!!cookies.twoStar)
   const [hasVoted3, setHasVoted3] = useState(!!cookies.threeStar)
   const [currentSlide, setCurrentSlide] = useState(0)
-  const imageArray = [
-    "greyscale.png",
-    "mishka-little-duckling-taking-a-stroll-in-hyde-park.jpg",
-    "image-from-ios-8-.jpg",
-  ]
+  const [imageArray, setImageArray] = useState([])
 
   useEffect(() => {
     const fetchImages = async () => {
@@ -145,9 +141,10 @@ const Gallery = () => {
       )
       const res = await response.json()
       console.log({ res })
+      setImageArray(res)
     }
 
-    console.log(fetchImages())
+    fetchImages()
   }, [])
 
   const on1StarClick = () => {
@@ -170,6 +167,8 @@ const Gallery = () => {
 
   const clickNext = () => {
     setCurrentSlide(currentSlide + 1)
+
+    console.log(imageArray)
   }
   const clickBack = () => {
     setCurrentSlide(currentSlide - 1)
@@ -189,7 +188,7 @@ const Gallery = () => {
               {imageArray.map((img, index) => (
                 <Slide index={index}>
                   <Image
-                    src={`/assets/${img}`}
+                    src={`/assets/${img.Guid}.jpg`}
                     hasMasterSpinner={true}
                     className="imgDiv"
                     tag="div"
@@ -206,7 +205,7 @@ const Gallery = () => {
             </ButtonNext>
           </CarouselProvider>
         </CarouselContainer>
-        <h1>{currentSlide}</h1>
+        <h1>{imageArray[currentSlide].Description}</h1>
         <ButtonsWrapper>
           <Vote color="#cd7f32" onClick={on1StarClick} disabled={hasVoted1}>
             <img src="/img/bronze.svg" />

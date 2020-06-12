@@ -6,14 +6,13 @@ import {
   Slide,
   ButtonBack,
   ButtonNext,
-  CarouselContext,
   Image,
 } from "pure-react-carousel"
 import "pure-react-carousel/dist/react-carousel.es.css"
 import theme from "@totallymoney/ui/theme"
 import Grid from "@totallymoney/ui/components/Grid"
 import Chevron from "@totallymoney/ui/icons/Chevron"
-import { CookiesProvider, useCookies } from "react-cookie"
+import { useCookies } from "react-cookie"
 
 const Container = styled.div`
   background-image: radial-gradient(
@@ -83,13 +82,24 @@ const CarouselContainer = styled.div`
     background: red;
   }
 `
-
-const LogoWrapper = styled.div``
+const Description = styled.h1`
+  grid-column: 1 / 13;
+  padding: ${theme.spacingS};
+  font-size: 32px;
+  text-align: center;
+  justify-self: center;
+  border: 1px solid white;
+  font-family: "Great Vibes", cursive;
+  color: white;
+  text-shadow: 0px 0px 6px #ffffff;
+`
 
 const Logo = styled.div`
-  grid-column: 5 / 10;
-  height: 30px;
-  background-image: url(/assets/new-project-5-.png);
+  grid-column: 1 / 13;
+  justify-self: center;
+  height: 110px;
+  width: 110px;
+  background-image: url(/img/Exhibitm-logo-white-05.png);
   background-size: contain;
   background-repeat: no-repeat;
 `
@@ -115,9 +125,7 @@ const Vote = styled.button`
 `
 
 const Gallery = () => {
-  const [cookies, setCookie, removeCookie] = useCookies(["cookie-name"])
-
-  console.log({ cookies })
+  const [cookies, setCookie] = useCookies(["cookie-name"])
 
   const [hasVoted1, setHasVoted1] = useState(!!cookies.oneStar)
   const [hasVoted2, setHasVoted2] = useState(!!cookies.twoStar)
@@ -164,25 +172,26 @@ const Gallery = () => {
       }
     )
     const res = await response
-    console.log({ res })
+    return res.ok
   }
 
   const on1StarClick = () => {
-    doVote(1)
-    setCookie("oneStar", "true", { maxAge: 1814400 }) // 3 weeks
-    setHasVoted1(true)
+    if (doVote(1)) {
+      setCookie("oneStar", "true", { maxAge: 1814400 }) // 3 weeks
+      setHasVoted1(true)
+    }
   }
   const on2StarClick = () => {
-    doVote(2)
-
-    setCookie("twoStar", "true", { maxAge: 1814400 }) // 3 weeks
-    setHasVoted2(true)
+    if (doVote(2)) {
+      setCookie("twoStar", "true", { maxAge: 1814400 }) // 3 weeks
+      setHasVoted2(true)
+    }
   }
   const on3StarClick = () => {
-    doVote(3)
-
-    setCookie("threeStar", "true", { maxAge: 1814400 }) // 3 weeks
-    setHasVoted3(true)
+    if (doVote(3)) {
+      setCookie("threeStar", "true", { maxAge: 1814400 }) // 3 weeks
+      setHasVoted3(true)
+    }
   }
 
   const clickNext = () => {
@@ -196,12 +205,12 @@ const Gallery = () => {
 
   return (
     <Container>
-      <Grid style={{ gridRowGap: theme.spacingS }}>
+      <Grid style={{ gridRowGap: theme.spacingML }}>
         <Logo />
         <CarouselContainer>
           <CarouselProvider
             naturalSlideWidth={100}
-            naturalSlideHeight={40}
+            naturalSlideHeight={25}
             totalSlides={imageArray.length}
           >
             <Slider>
@@ -225,7 +234,9 @@ const Gallery = () => {
             </ButtonNext>
           </CarouselProvider>
         </CarouselContainer>
-        <h1>{imageArray[currentSlide]?.Description}</h1>
+        {imageArray[currentSlide] && (
+          <Description>{imageArray[currentSlide]?.Description}</Description>
+        )}
         <ButtonsWrapper>
           <Vote color="#cd7f32" onClick={on1StarClick} disabled={hasVoted1}>
             <img src="/img/bronze.svg" />

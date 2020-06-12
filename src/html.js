@@ -37,6 +37,10 @@ export default function HTML(props) {
           rel="stylesheet"
           href="https://ddqol34nhllwe.cloudfront.net/reset.css"
         />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap"
+          rel="stylesheet"
+        ></link>
         <title>ExhibiTM</title>
         {props.headComponents}
       </head>

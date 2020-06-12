@@ -163,6 +163,7 @@ const Vote = styled.button`
 
 const Gallery = () => {
   const [cookies, setCookie] = useCookies(["cookie-name"])
+  console.log({ cookies })
 
   const [hasVoted1, setHasVoted1] = useState(!!cookies.oneStar)
   const [hasVoted2, setHasVoted2] = useState(!!cookies.twoStar)

@@ -147,19 +147,39 @@ const Gallery = () => {
     fetchImages()
   }, [])
 
+  const doVote = async stars => {
+    const data = { guid: imageArray[currentSlide].Guid, stars }
+
+    const response = await fetch(
+      "https://990o6qask6.execute-api.eu-west-2.amazonaws.com/dev/vote",
+      {
+        method: "POST", // *GET, POST, PUT, DELETE, etc.
+        mode: "cors", // no-cors, *cors, same-origin
+        headers: {
+          "Content-Type": "application/json",
+          "x-api-key": "exhibiTM-hackday-api-key",
+          // 'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: JSON.stringify(data), // body data type must match "Content-Type" header
+      }
+    )
+    const res = await response
+    console.log({ res })
+  }
+
   const on1StarClick = () => {
-    console.log({ guid: imageArray[currentSlide], stars: 1 })
+    doVote(1)
     setCookie("oneStar", "true", { maxAge: 1814400 }) // 3 weeks
     setHasVoted1(true)
   }
   const on2StarClick = () => {
-    console.log({ guid: imageArray[currentSlide], stars: 2 })
+    doVote(2)
 
     setCookie("twoStar", "true", { maxAge: 1814400 }) // 3 weeks
     setHasVoted2(true)
   }
   const on3StarClick = () => {
-    console.log({ guid: imageArray[currentSlide], stars: 3 })
+    doVote(3)
 
     setCookie("threeStar", "true", { maxAge: 1814400 }) // 3 weeks
     setHasVoted3(true)
@@ -205,7 +225,7 @@ const Gallery = () => {
             </ButtonNext>
           </CarouselProvider>
         </CarouselContainer>
-        <h1>{imageArray[currentSlide].Description}</h1>
+        <h1>{imageArray[currentSlide]?.Description}</h1>
         <ButtonsWrapper>
           <Vote color="#cd7f32" onClick={on1StarClick} disabled={hasVoted1}>
             <img src="/img/bronze.svg" />

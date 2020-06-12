@@ -11,15 +11,13 @@ import {
 import "pure-react-carousel/dist/react-carousel.es.css"
 import theme from "@totallymoney/ui/theme"
 import Grid from "@totallymoney/ui/components/Grid"
+import Heading from "@totallymoney/ui/components/Heading"
+import Text from "@totallymoney/ui/components/Text"
 import Chevron from "@totallymoney/ui/icons/Chevron"
 import { useCookies } from "react-cookie"
 
 const Container = styled.div`
-  background-image: radial-gradient(
-    circle farthest-corner at 10% 20%,
-    rgba(90, 92, 106, 1) 0%,
-    rgba(32, 45, 58, 1) 81.3%
-  );
+  background: white;
 
   height: 100vh;
   display: flex;
@@ -28,10 +26,17 @@ const Container = styled.div`
 `
 
 const CarouselContainer = styled.div`
-  grid-column: 1 / 13;
+  grid-column: 3 / 11;
+  grid-row: 1 / 3;
+  &:focus {
+    outline: none;
+  }
 
   .carousel {
     position: relative;
+  }
+  *:focus {
+    outline: none;
   }
 
   .imgDiv {
@@ -46,8 +51,8 @@ const CarouselContainer = styled.div`
   .carousel__next-button,
   .carousel__back-button {
     background: #ffffffaa;
-    height: 50px;
-    width: 50px;
+    height: 30px;
+    width: 30px;
     border-radius: 50%;
     border: none;
     position: absolute;
@@ -82,45 +87,77 @@ const CarouselContainer = styled.div`
     background: red;
   }
 `
-const Description = styled.h1`
+const Description = styled(Text)`
   grid-column: 1 / 13;
-  padding: ${theme.spacingS};
-  font-size: 32px;
+  grid-row: 3
   text-align: center;
   justify-self: center;
-  border: 1px solid white;
-  font-family: "Great Vibes", cursive;
-  color: white;
-  text-shadow: 0px 0px 6px #ffffff;
 `
 
 const Logo = styled.div`
-  grid-column: 1 / 13;
-  justify-self: center;
-  height: 110px;
-  width: 110px;
-  background-image: url(/img/Exhibitm-logo-white-05.png);
+  grid-column: 1 / 3;
+  grid-row: 1;
+  justify-self: flex-start;
+  height: 120px;
+  width: 120px;
+  background-image: url(/img/logo.png);
   background-size: contain;
   background-repeat: no-repeat;
 `
 const ButtonsWrapper = styled.div`
-  grid-column: 4 / 10;
+  grid-column: 1 / 3;
+  grid-row: 2;
   display: flex;
-  justify-content: space-around;
+  flex-direction: column;
+  align-self: flex-start;
+  justify-content: center;
 `
 
 const Vote = styled.button`
-  background: transparent;
-  border: 1px solid;
-  border-color: ${props => props.color};
+  display: flex;
   cursor: ${props => (props.disabled ? "auto" : "pointer")};
-  border-radius: 50%;
-  height: 70px;
-  width: 70px;
-  opacity: ${props => (props.disabled ? ".1" : "1")};
+  border-radius: 5px;
+  padding: ${theme.spacingXS};
+  border: 2px solid #928cc8;
+  transition: all 0.2s ease-out;
+  background-color: white;
+  max-width: 120px;
+  display: grid;
+  margin-top: ${theme.spacingS};
+  grid-template-columns: 33% 33% 33%;
+  justify-content: center;
+
+  > img {
+    justify-self: center;
+  }
 
   &:focus {
     outline: none;
+    background-color: #251991;
+    border-color: #251991;
+  }
+
+  &:hover {
+    outline: none;
+    background-color: #251991;
+    border-color: #251991;
+
+    > img {
+      /* filter: brightness(0.7); */
+      /* transition: filter 0.2s ease-out; */
+    }
+  }
+
+  &:disabled {
+     {
+      outline: none;
+      background-color: #928cc8;
+
+      > img {
+        filter: brightness(0.12) saturate(21);
+        transition: filter 0.2s ease-out;
+      }
+    }
   }
 `
 
@@ -148,7 +185,6 @@ const Gallery = () => {
         }
       )
       const res = await response.json()
-      console.log({ res })
       setImageArray(res)
     }
 
@@ -205,13 +241,15 @@ const Gallery = () => {
 
   return (
     <Container>
-      <Grid style={{ gridRowGap: theme.spacingML }}>
+      <Grid>
         <Logo />
         <CarouselContainer>
           <CarouselProvider
             naturalSlideWidth={100}
-            naturalSlideHeight={25}
+            naturalSlideHeight={70}
             totalSlides={imageArray.length}
+            dragEnabled={false}
+            touchEnabled={false}
           >
             <Slider>
               {imageArray.map((img, index) => (
@@ -238,14 +276,18 @@ const Gallery = () => {
           <Description>{imageArray[currentSlide]?.Description}</Description>
         )}
         <ButtonsWrapper>
-          <Vote color="#cd7f32" onClick={on1StarClick} disabled={hasVoted1}>
-            <img src="/img/bronze.svg" />
+          <Heading variant="h6">Cast your vote</Heading>
+          <Vote onClick={on1StarClick} disabled={hasVoted1}>
+            <img src="/img/star.svg" />
           </Vote>
-          <Vote color="#c0c0c0" onClick={on2StarClick} disabled={hasVoted2}>
-            <img src="/img/silver.svg" />
+          <Vote onClick={on2StarClick} disabled={hasVoted2}>
+            <img src="/img/star.svg" />
+            <img src="/img/star.svg" />
           </Vote>
-          <Vote color="#ffd700" onClick={on3StarClick} disabled={hasVoted3}>
-            <img src="/img/gold.svg" />
+          <Vote onClick={on3StarClick} disabled={hasVoted3}>
+            <img src="/img/star.svg" />
+            <img src="/img/star.svg" />
+            <img src="/img/star.svg" />
           </Vote>
         </ButtonsWrapper>
       </Grid>
